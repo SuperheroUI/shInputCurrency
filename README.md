@@ -1,2 +1,2 @@
-# shInputCurrency
-Currency input for superheroui
+# shInputText
+SuperheroUI - Input field for currency
