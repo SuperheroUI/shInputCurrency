@@ -26,7 +26,7 @@ class ShInputCurrency extends Component {
             var isNeg = ('-' && _.includes(value, '-'));
 
             var regExp = '[^0-9.]';
-            var numString = value.replace(new RegExp(regExp, 'g'), '');
+            var numString = value.toString().replace(new RegExp(regExp, 'g'), '');
 
             var numList = numString.split('.');
 
@@ -45,11 +45,17 @@ class ShInputCurrency extends Component {
         return num;
     };
 
+
+    runFormarters(txt){
+        return '$' + (this.formatNumber(Number(this.getDecimal(txt)).toFixed(2)));
+    }
+
     componentDidMount() {
         if (this.props.value) {
+            var text = this.runFormarters(this.props.value);
             this.setState(
                 {
-                    value: this.props.value,
+                    value: text,
                     classList: ['sh-input-currency']
                 }
             )
@@ -95,7 +101,7 @@ class ShInputCurrency extends Component {
     handleBlur(event) {
         var text = event.target.value;
 
-        text = '$' + (this.formatNumber(Number(this.getDecimal(text)).toFixed(2)));
+        text = this.runFormarters(text);
 
         if (this.props.onBlur) {
             this.props.onBlur(event);
@@ -125,7 +131,9 @@ class ShInputCurrency extends Component {
             <div className={this.state.classList}>
                 <label>
                     <span className="label">{this.props.label}</span>
-                    <input ref="input" type="text"
+                    <input ref="input"
+                           className="sh-currency-input"
+                           type="text"
                            {...other}
                            placeholder={this.state.placeholderText}
                            onChange={this.handleChange}
