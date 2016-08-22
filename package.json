@@ -8,7 +8,8 @@
     "test": "./node_modules/.bin/karma start",
     "build": "./node_modules/.bin/webpack -d --config webpack.config.js",
     "dev": "./node_modules/.bin/webpack -d --watch --config webpack.config.js",
-    "example": "./node_modules/.bin/webpack -d --watch --config webpack.example.config.js"
+    "example": "./node_modules/.bin/webpack -d --watch --config webpack.example.config.js",
+    "coveralls": "./node_modules/.bin/coveralls < ./bin/coverage/lcov/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "babel-preset-react": "^6.11.1",
     "css-loader": "^0.23.1",
     "isparta-loader": "^2.0.0",
+    "coveralls": "^2.11.12",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-cli": "^1.0.1",

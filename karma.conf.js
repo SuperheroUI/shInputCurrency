@@ -16,7 +16,7 @@ module.exports = function(config) {
 
       reporters: [
         { type: 'text-summary' },
-        { type: 'html', subdir: 'html' }
+        { type: 'lcov', subdir: 'lcov' }
       ]
     },
     webpack: {
@@ -39,7 +39,7 @@ module.exports = function(config) {
         ],
         preLoaders: [
           {
-            test: /\.jsx?$/,
+            test: /^((?!\.spec\.).)*\.jsx?$/,
             loader: 'isparta',
             include: path.join(__dirname, 'src')
           }
