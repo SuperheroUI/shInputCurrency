@@ -25,7 +25,7 @@ class App extends React.Component {
     render() {
         return <div>
             <form name="test" onSubmit={this.handleSubmit}>
-                <ShInputCurrency className="bin" label="Enter Amount" value="" ></ShInputCurrency>
+                <ShInputCurrency label="Enter Amount" value="" ></ShInputCurrency>
                 <button type="submit">go</button>
             </form>
         </div>
