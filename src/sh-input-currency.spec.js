@@ -11,6 +11,25 @@ describe('root', function () {
         expect(root.state).toBeTruthy();
     });
 
+    it('things do No explode if there is no onChange function', function() {
+        let value = true;
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
+        root.handleChange({
+            target: {
+                value: 3
+            }
+        });
+    });
+    it('things do No explode if there is no onFocus function', function() {
+        let value = true;
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
+        root.handleFocus({
+            target: {
+                value: 3
+            }
+        });
+    });
+
     it('works with on change, initial state and formats currency with dollar', function () {
         let what = '0';
         let changeMe = () => {
@@ -100,6 +119,7 @@ describe('root', function () {
             }
         });
 
+        expect(value).toBe(1);
         expect(input.value).toBe('3');
         TestUtils.Simulate.blur(input);
         expect(input.value).toBe('$3.00');

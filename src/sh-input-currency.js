@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as _ from 'lodash';
+import sh from 'sh-core';
 require('./sh-input-currency.scss');
 
 class ShInputCurrency extends Component {
@@ -7,7 +8,8 @@ class ShInputCurrency extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            classList: ['sh-input-currency empty'],
+            value: '',
+            classList: 'sh-input-currency empty',
             placeholderText: '+'
         };
 
@@ -16,38 +18,9 @@ class ShInputCurrency extends Component {
         this.handleFocus = this.handleFocus.bind(this);
     }
 
-    getDecimal(value) {
-        if (!value) {
-            return null;
-        }
-
-        var num = value;
-        if (!_.isNumber(value)) {
-            var isNeg = ('-' && _.includes(value, '-'));
-
-            var regExp = '[^0-9.]';
-            var numString = value.toString().replace(new RegExp(regExp, 'g'), '');
-
-            var numList = numString.split('.');
-
-            // numList will always have at least one value in array because we checked for an empty string earlier.
-            numList[0] += '.';
-            numString = numList.join('');
-            num = parseFloat(numString);
-
-            if (!num) {
-                num = 0;
-            } else if (isNeg) {
-                num *= -1;
-            }
-        }
-
-        return num;
-    };
-
 
     runFormarters(txt){
-        return '$' + (this.formatNumber(Number(this.getDecimal(txt)).toFixed(2)));
+        return '$' + (this.formatNumber(Number(sh.getDecimal(txt)).toFixed(2)));
     }
 
     componentDidMount() {
@@ -56,7 +29,7 @@ class ShInputCurrency extends Component {
             this.setState(
                 {
                     value: text,
-                    classList: ['sh-input-currency']
+                    classList: 'sh-input-currency'
                 }
             )
         }
@@ -65,20 +38,23 @@ class ShInputCurrency extends Component {
             this.state.placeholderText = 'Required Field';
             this.setState(this.state);
         }
+        this.state.placeholderHolder = this.state.placeholderText;
     }
 
     handleChange(event) {
         var text = event.target.value;
 
         this.setState({value: text});
-        event.target.value = this.getDecimal(text);
-        this.props.onChange(event);
+        event.target.value = sh.getDecimal(text);
+        if(this.props.onChange){
+            this.props.onChange(event);
+        }
     };
 
 
     handleFocus(event) {
         var text = event.target.value;
-        text = text.replace(/[,$]/g, '');
+        text = text.toString().replace(/[,$]/g, '');
 
         if (this.props.onFocus) {
             this.props.onFocus(event);
@@ -86,7 +62,8 @@ class ShInputCurrency extends Component {
 
         this.setState(
             {
-                value: text
+                value: text,
+                placeholderText: ''
             }
         );
         setTimeout(()=> {
@@ -110,7 +87,8 @@ class ShInputCurrency extends Component {
         this.setState(
             {
                 value: text,
-                classList: ['sh-input-currency']
+                placeholderText: this.state.placeholderHolder,
+                classList: 'sh-input-currency'
             }
         );
 
@@ -118,17 +96,17 @@ class ShInputCurrency extends Component {
             this.setState(
                 {
                     value: this.state.value,
-                    classList: ['sh-input-currency empty']
+                    classList: 'sh-input-currency empty'
                 }
             )
         }
     }
 
     render() {
-        var {onFocus, onBlur, ...other} = this.props;
+        var {onFocus, onBlur, className, ...other} = this.props;
 
         return (
-            <div className={this.state.classList}>
+            <div className={this.props.className ? this.props.className +' '+this.state.classList : this.state.classList}>
                 <label>
                     <span className="label">{this.props.label}</span>
                     <input ref="input"
