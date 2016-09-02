@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import * as _ from 'lodash';
-import sh from 'sh-core';
+import ShCore from 'sh-core';
 require('./sh-input-currency.scss');
 
 class ShInputCurrency extends Component {
@@ -9,44 +9,78 @@ class ShInputCurrency extends Component {
         super(props);
         this.state = {
             value: '',
-            classList: 'sh-input-currency empty',
-            placeholderText: '+'
+            classList: {
+                shInputCurrency: true,
+                empty: true
+            },
+            validStatus: 'unknown',
+            placeholderText: '+',
+            requiredField: {showRequired: false}
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
+        this.validate = this.validate.bind(this);
     }
 
+    validate(onSubmit) {
+        if (onSubmit) {
+            this.state.classList.shTouched = true;
+        }
+        let rtn = {isValid: true};
 
-    runFormarters(txt){
-        return '$' + (this.formatNumber(Number(sh.getDecimal(txt)).toFixed(2)));
+        this.state.classList.shInvalid = false;
+        if (this.props.required && this.state.value.trim() === '') {
+            this.state.classList.shInvalid = true;
+
+            rtn.isValid = false;
+            rtn.msg = 'Required';
+        }
+        var newState = _.clone(this.state);
+        this.setState(newState);
+        return rtn;
+    };
+
+    componentWillMount() {
+        if (this.props.validator) {
+            this.props.validator.register(this, this.validate);
+        }
+    };
+
+    componentWillUnmount() {
+        if (this.props.validator) {
+            this.props.validator.unregister(this);
+        }
+    };
+
+    runFormarters(txt) {
+        return '$' + (this.formatNumber(Number(ShCore.getDecimal(txt)).toFixed(2)));
     }
 
     componentDidMount() {
+        var newState = _.clone(this.state);
         if (this.props.value) {
-            var text = this.runFormarters(this.props.value);
-            this.setState(
-                {
-                    value: text,
-                    classList: 'sh-input-currency'
-                }
-            )
+            newState.value = this.runFormarters(this.props.value);
         }
 
-        if (this.props.required) {
-            this.state.placeholderText = 'Required Field';
-            this.setState(this.state);
-        }
+        newState.requiredField.showRequired = this.props.required;
+        this.setState(newState);
+
         this.state.placeholderHolder = this.state.placeholderText;
     }
 
     handleChange(event) {
-        var text = event.target.value;
+        this.setState({value: event.target.value}, ()=> {
+            if (this.props.validator) {
+                this.props.validator.validate()
+            } else {
+                this.validate();
+            }
+        });
 
-        this.setState({value: text});
-        event.target.value = sh.getDecimal(text);
-        if(this.props.onChange){
+        event.target.value = ShCore.getDecimal(event.target.value);
+        if (this.props.onChange) {
             this.props.onChange(event);
         }
     };
@@ -60,12 +94,13 @@ class ShInputCurrency extends Component {
             this.props.onFocus(event);
         }
 
-        this.setState(
-            {
-                value: text,
-                placeholderText: ''
-            }
-        );
+        var newState = _.clone(this.state);
+        newState.classList.shTouched = true;
+        newState.value = text;
+        newState.placeholderText = '';
+
+        this.setState(newState);
+
         setTimeout(()=> {
             this.refs.input.select();
         }, 100)
@@ -76,39 +111,35 @@ class ShInputCurrency extends Component {
     }
 
     handleBlur(event) {
-        var text = event.target.value;
+        this.validate();
+        var newState = _.clone(this.state);
 
-        text = this.runFormarters(text);
+        if(event.target.value.length > 0){
+            var text = event.target.value;
+            text = this.runFormarters(text);
+            newState.value = text;
+        }
+        
+        newState.placeholderText = newState.placeholderHolder;
+        newState.classList.empty = !this.state.value;
+        newState.requiredField.showRequired =!this.state.value;
+
+        this.setState(newState);
 
         if (this.props.onBlur) {
             this.props.onBlur(event);
         }
-
-        this.setState(
-            {
-                value: text,
-                placeholderText: this.state.placeholderHolder,
-                classList: 'sh-input-currency'
-            }
-        );
-
-        if (!this.state.value) {
-            this.setState(
-                {
-                    value: this.state.value,
-                    classList: 'sh-input-currency empty'
-                }
-            )
-        }
     }
 
     render() {
-        var {onFocus, onBlur, className, ...other} = this.props;
+        var {onFocus, onBlur, className, validator,required, ...other} = this.props;
 
         return (
-            <div className={this.props.className ? this.props.className +' '+this.state.classList : this.state.classList}>
+            <div
+                className={this.props.className ? ShCore.getClassNames(this.state.classList) + ' ' + this.props.className : ShCore.getClassNames(this.state.classList)}>
                 <label>
                     <span className="label">{this.props.label}</span>
+                    <span className={"required-label " + ShCore.getClassNames(this.state.requiredField)}>required</span>
                     <input ref="input"
                            className="sh-currency-input"
                            type="text"
@@ -124,5 +155,21 @@ class ShInputCurrency extends Component {
         )
     }
 }
+
+ShInputCurrency.propTypes = {
+    validator: React.PropTypes.object,
+    value: React.PropTypes.any,
+    onChange: React.PropTypes.func,
+    label: React.PropTypes.string,
+    required: React.PropTypes.bool,
+};
+
+ShInputCurrency.defaultProps = {
+    value: null,
+    validator: null,
+    onChange: _.noop,
+    label: '',
+    required: false
+};
 
 export default ShInputCurrency;

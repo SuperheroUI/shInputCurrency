@@ -31,6 +31,14 @@
         }
     }
 
+    &.sh-invalid {
+        &.sh-touched {
+            input {
+                border: 1px solid $color-error;
+            }
+        }
+    }
+
     input {
         position: absolute;
         top: 0;
@@ -70,4 +78,16 @@
             @include placeholder;
         }
     }
+
+    .required-label {
+         opacity: 0;
+         position: absolute;
+         right: 4px;
+         top: 4px;
+         color:$color-box-background4;
+
+         &.show-required {
+             opacity: 1;
+         }
+     }
 }

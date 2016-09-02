@@ -49,10 +49,7 @@ describe('root', function () {
         };
         var root = TestUtils.renderIntoDocument(<ShInputCurrency required value={what} onChange={changeMe}/>);
         let rootNode = ReactDOM.findDOMNode(root);
-        expect(root.state).toBeTruthy();
-        let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
-        expect(input.required).toBe(true);
-        expect(input.placeholder).toBe('Required Field');
+        expect(root.state.requiredField.showRequired).toBeTruthy();
     });
 
     it('input styles be set to empty if there is no value', function () {
