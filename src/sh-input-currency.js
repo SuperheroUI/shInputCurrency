@@ -58,6 +58,14 @@ class ShInputCurrency extends Component {
         return '$' + (this.formatNumber(Number(ShCore.getDecimal(txt)).toFixed(2)));
     }
 
+    componentWillReceiveProps(props) {
+        if (!_.isUndefined(props.value) && !_.isEqual(props.value, this.state.value)) {
+            var newState = _.clone(this.state);
+            newState.value = this.runFormarters(props.value);
+            this.setState(newState, this.validate);
+        }
+    }
+
     componentDidMount() {
         var newState = _.clone(this.state);
         if (this.props.value) {
@@ -112,15 +120,15 @@ class ShInputCurrency extends Component {
         this.validate();
         var newState = _.clone(this.state);
 
-        if(event.target.value.length > 0){
+        if (event.target.value.length > 0) {
             var text = event.target.value;
             text = this.runFormarters(text);
             newState.value = text;
         }
-        
+
         newState.placeholderText = newState.placeholderHolder;
         newState.classList.empty = !this.state.value;
-        newState.requiredField.showRequired =!this.state.value;
+        newState.requiredField.showRequired = !this.state.value;
 
         this.setState(newState);
 
@@ -130,7 +138,7 @@ class ShInputCurrency extends Component {
     }
 
     render() {
-        var {onFocus, onBlur, className, validator,required, ...other} = this.props;
+        var {onFocus, onBlur, className, validator, required, value, ...other} = this.props;
 
         return (
             <div
@@ -163,7 +171,6 @@ ShInputCurrency.propTypes = {
 };
 
 ShInputCurrency.defaultProps = {
-    value: null,
     validator: null,
     onChange: _.noop,
     label: '',

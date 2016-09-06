@@ -25,7 +25,8 @@ class App extends React.Component {
     render() {
         return <div>
             <form name="test" onSubmit={this.handleSubmit}>
-                <ShInputCurrency label="Enter Amount" value="" onChange={this.handleChange} required></ShInputCurrency>
+                <input onChange={this.handleChange}/>
+                <ShInputCurrency label="Enter Amount" value={this.state.value} onChange={this.handleChange} required></ShInputCurrency>
                 <button type="submit">go</button>
             </form>
         </div>
