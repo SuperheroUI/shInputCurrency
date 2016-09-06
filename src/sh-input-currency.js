@@ -80,9 +80,7 @@ class ShInputCurrency extends Component {
         });
 
         event.target.value = ShCore.getDecimal(event.target.value);
-        if (this.props.onChange) {
-            this.props.onChange(event);
-        }
+        this.props.onChange(event);
     };
 
 
@@ -139,7 +137,7 @@ class ShInputCurrency extends Component {
                 className={this.props.className ? ShCore.getClassNames(this.state.classList) + ' ' + this.props.className : ShCore.getClassNames(this.state.classList)}>
                 <label>
                     <span className="label">{this.props.label}</span>
-                    <span className={"required-label " + ShCore.getClassNames(this.state.requiredField)}>required</span>
+                    <span className={"required-label " + ShCore.getClassNames(this.state.requiredField)}>REQUIRED</span>
                     <input ref="input"
                            className="sh-currency-input"
                            type="text"

@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react/lib/ReactTestUtils');
+import * as _ from 'lodash';
 
 var ShInputCurrency = require('./sh-input-currency').default;
 
@@ -11,7 +12,7 @@ describe('root', function () {
         expect(root.state).toBeTruthy();
     });
 
-    it('things do No explode if there is no onChange function', function() {
+    it('there is a default onChange function', function() {
         let value = true;
         var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
         root.handleChange({
@@ -20,7 +21,7 @@ describe('root', function () {
             }
         });
     });
-    it('things do No explode if there is no onFocus function', function() {
+    it('things do not explode if there is no onFocus function', function() {
         let value = true;
         var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
         root.handleFocus({
@@ -120,5 +121,100 @@ describe('root', function () {
         expect(input.value).toBe('3');
         TestUtils.Simulate.blur(input);
         expect(input.value).toBe('$3.00');
+    });
+
+    it('handle internal changes, if a validator property exists', function () {
+        let value = '0';
+        let changeMe = () => {
+            value = 1;
+        };
+        var validator = {
+            validate: _.noop,
+            register: _.noop
+        };
+
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency validator={validator} value={value} onChange={changeMe}/>);
+        let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
+
+        root.handleChange({
+            target: {
+                value: 3
+            }
+        });
+
+        expect(value).toBe(1);
+        expect(input.value).toBe('3');
+        TestUtils.Simulate.blur(input);
+        expect(input.value).toBe('$3.00');
+    });
+
+    it('values should still work if there is no on change on the component', function () {
+        let value = '0';
+
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
+        let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
+
+        root.handleChange({
+            target: {
+                value: 3
+            }
+        });
+
+        expect(input.value).toBe('3');
+        TestUtils.Simulate.blur(input);
+        expect(input.value).toBe('$3.00');
+    });
+
+    it('if the form as been submitted all fields need to be touched', function () {
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency required />);
+        root.validate(true);
+        expect(root.state.classList.shTouched).toBe(true);
+    });
+
+    it('a required field with now value should be invalid', function () {
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency required />);
+        expect(root.validate().isValid).toBe(false)
+    });
+
+    it('should be able to unmount a plane component', function(){
+        let value = null;
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} required />);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(root).parentNode);
+    });
+
+    it('should call unregister if a validator is present', function(){
+        let value = null;
+        let validator = {
+            register: _.noop,
+            unregister: _.noop,
+        };
+        spyOn(validator, 'unregister');
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency validator={validator} value={value} required />);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(root).parentNode);
+        expect(validator.unregister).toHaveBeenCalled();
+    });
+
+    it('should have class names passed from parent', function () {
+        let value = '0';
+
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} />);
+        let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
+
+        root.handleChange({
+            target: {
+                value: 3
+            }
+        });
+
+        expect(input.value).toBe('3');
+        TestUtils.Simulate.blur(input);
+        expect(input.value).toBe('$3.00');
+    });
+
+    it('set classes from parent', function () {
+        let value = '';
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency className="spam" value={value} />);
+        let rootNode = ReactDOM.findDOMNode(root);
+        expect(rootNode.classList).toContain('spam');
     });
 });
