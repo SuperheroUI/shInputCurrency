@@ -9,6 +9,7 @@ class ShInputCurrency extends Component {
         super(props);
         this.state = {
             value: '',
+            display: '',
             classList: {
                 shInputCurrency: true,
                 empty: true
@@ -31,12 +32,14 @@ class ShInputCurrency extends Component {
         let rtn = {isValid: true};
 
         this.state.classList.shInvalid = false;
-        if (this.props.required && this.state.value.trim() === '') {
+
+        if (this.props.required && (this.state.value === null || this.state.value === '')) {
             this.state.classList.shInvalid = true;
 
             rtn.isValid = false;
             rtn.msg = 'Required';
         }
+
         var newState = _.clone(this.state);
         this.setState(newState);
         return rtn;
@@ -58,37 +61,42 @@ class ShInputCurrency extends Component {
         return '$' + (this.formatNumber(Number(ShCore.getDecimal(txt)).toFixed(2)));
     }
 
-    componentWillReceiveProps(props) {
-        if (!_.isUndefined(props.value) && !_.isEqual(props.value, this.state.value)) {
-            var newState = _.clone(this.state);
-            newState.value = this.runFormarters(props.value);
+    componentDidMount(){
+        let newValue = ShCore.getDecimal(this.props.value);
+        var newState = _.clone(this.state);
+        newState.value =newValue;
+        newState.display= this.runFormarters(newValue);
+        newState.classList.empty = false;
+
+        if (this.props.value) {
             this.setState(newState, this.validate);
         }
     }
 
-    componentDidMount() {
-        var newState = _.clone(this.state);
-        if (this.props.value) {
-            newState.value = this.runFormarters(this.props.value);
+    componentWillReceiveProps(props) {
+        let newValue = ShCore.getDecimal(props.value);
+        if (!_.isUndefined(props.value) && !_.isEqual(newValue, this.state.value)) {
+            this.setState({
+                value: newValue,
+                display: this.runFormarters(newValue)
+            }, this.validate);
         }
-
-        newState.requiredField.showRequired = this.props.required;
-        this.setState(newState);
-
-        this.state.placeholderHolder = this.state.placeholderText;
     }
 
     handleChange(event) {
-        this.setState({value: event.target.value}, ()=> {
+        event.persist();
+
+        var dec = ShCore.getDecimal(event.target.value);
+        this.setState({value: dec, display: event.target.value}, ()=> {
             if (this.props.validator) {
                 this.props.validator.validate()
             } else {
                 this.validate();
             }
-        });
 
-        event.target.value = ShCore.getDecimal(event.target.value);
-        this.props.onChange(event);
+            event.target.value = dec;
+            this.props.onChange(event);
+        });
     };
 
 
@@ -123,7 +131,7 @@ class ShInputCurrency extends Component {
         if (event.target.value.length > 0) {
             var text = event.target.value;
             text = this.runFormarters(text);
-            newState.value = text;
+            newState.display = text;
         }
 
         newState.placeholderText = newState.placeholderHolder;
@@ -154,7 +162,7 @@ class ShInputCurrency extends Component {
                            onChange={this.handleChange}
                            onFocus={this.handleFocus}
                            onBlur={this.handleBlur}
-                           value={this.state.value}
+                           value={this.state.display}
                     />
                 </label>
             </div>

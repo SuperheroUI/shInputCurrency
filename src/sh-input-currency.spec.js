@@ -16,6 +16,7 @@ describe('root', function () {
         let value = true;
         var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value}/>);
         root.handleChange({
+            persist: _.noop,
             target: {
                 value: 3
             }
@@ -25,6 +26,7 @@ describe('root', function () {
         let value = true;
         var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value}/>);
         root.handleFocus({
+            persist: _.noop,
             target: {
                 value: 3
             }
@@ -37,19 +39,16 @@ describe('root', function () {
             value = 1;
         };
         var root = TestUtils.renderIntoDocument(<ShInputCurrency value={what} onChange={changeMe}/>);
-        let rootNode = ReactDOM.findDOMNode(root);
         expect(root.state).toBeTruthy();
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
         expect(input.value).toBe('$0.00');
     });
 
     it('works a field is required', function () {
-        let what = '0';
-        let changeMe = () => {
-            value = 1;
-        };
-        var root = TestUtils.renderIntoDocument(<ShInputCurrency required value={what} onChange={changeMe}/>);
-        let rootNode = ReactDOM.findDOMNode(root);
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency required />);
+        let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
+        TestUtils.Simulate.focus(input);
+        TestUtils.Simulate.blur(input);
         expect(root.state.requiredField.showRequired).toBeTruthy();
     });
 
@@ -63,7 +62,7 @@ describe('root', function () {
     });
 
     it('input styles not be set to empty if there is a value', function () {
-        let value = '0';
+        let value = 5;
         let changeMe = () => {
             value = 1;
         };
@@ -72,7 +71,7 @@ describe('root', function () {
         expect(root.state).toBeTruthy();
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
         TestUtils.Simulate.blur(input);
-        expect(rootNode.classList.length).toBe(1)
+        expect(rootNode.classList).not.toContain('empty')
     });
 
     it('handle having outside onBlur', function () {
@@ -112,8 +111,9 @@ describe('root', function () {
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
 
         root.handleChange({
+            persist: _.noop,
             target: {
-                value: 3
+                value: 3,
             }
         });
 
@@ -138,6 +138,7 @@ describe('root', function () {
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
 
         root.handleChange({
+            persist: _.noop,
             target: {
                 value: 3
             }
@@ -156,8 +157,10 @@ describe('root', function () {
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
 
         root.handleChange({
+            persist: _.noop,
             target: {
                 value: 3
+
             }
         });
 
@@ -172,7 +175,7 @@ describe('root', function () {
         expect(root.state.classList.shTouched).toBe(true);
     });
 
-    it('a required field with now value should be invalid', function () {
+    it('a required field with no value should be invalid', function () {
         var root = TestUtils.renderIntoDocument(<ShInputCurrency required/>);
         expect(root.validate().isValid).toBe(false)
     });
@@ -202,6 +205,7 @@ describe('root', function () {
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
 
         root.handleChange({
+            persist: _.noop,
             target: {
                 value: 3
             }
