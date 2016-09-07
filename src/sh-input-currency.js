@@ -61,11 +61,11 @@ class ShInputCurrency extends Component {
         return '$' + (this.formatNumber(Number(ShCore.getDecimal(txt)).toFixed(2)));
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let newValue = ShCore.getDecimal(this.props.value);
         var newState = _.clone(this.state);
-        newState.value =newValue;
-        newState.display= this.runFormarters(newValue);
+        newState.value = newValue;
+        newState.display = this.runFormarters(newValue);
         newState.classList.empty = false;
 
         if (this.props.value) {
@@ -75,11 +75,13 @@ class ShInputCurrency extends Component {
 
     componentWillReceiveProps(props) {
         let newValue = ShCore.getDecimal(props.value);
+
         if (!_.isUndefined(props.value) && !_.isEqual(newValue, this.state.value)) {
-            this.setState({
-                value: newValue,
-                display: this.runFormarters(newValue)
-            }, this.validate);
+            var newState = _.clone(this.state);
+            newState.classList.empty = !newValue;
+            newState.value = newValue;
+            newState.display = this.runFormarters(newValue);
+            this.setState(newState, this.validate);
         }
     }
 
