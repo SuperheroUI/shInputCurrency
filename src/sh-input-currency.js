@@ -115,11 +115,11 @@ class ShInputCurrency extends Component {
         newState.value = text;
         newState.placeholderText = '';
 
-        this.setState(newState);
-
-        setTimeout(()=> {
-            this.refs.input.select();
-        }, 100)
+        this.setState(newState,
+            ()=>{
+                this.refs.input.select();
+            }
+        );
     }
 
     formatNumber(num) {
