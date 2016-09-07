@@ -116,7 +116,7 @@ class ShInputCurrency extends Component {
         newState.placeholderText = '';
 
         this.setState(newState,
-            function(){
+            ()=>{
                 this.refs.input.select();
             }
         );
