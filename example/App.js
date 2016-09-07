@@ -9,7 +9,13 @@ class App extends React.Component {
             value: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeMe= this.handleChangeMe.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeMe(event) {
+        this.state.value = event.target.value;
+        this.setState(this.state);
     }
 
     handleChange(event) {
@@ -25,8 +31,10 @@ class App extends React.Component {
     render() {
         return <div>
             <form name="test" onSubmit={this.handleSubmit}>
-                <ShInputCurrency label="Enter Amount" value="" onChange={this.handleChange}></ShInputCurrency>
+                <input onChange={this.handleChange}/>
+                <ShInputCurrency label="Enter Amount" value={this.state.value} onChange={this.handleChange} required></ShInputCurrency>
                 <button type="submit">go</button>
+                {this.state.value}
             </form>
         </div>
     }
