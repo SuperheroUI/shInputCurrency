@@ -45,7 +45,7 @@ describe('root', function () {
     });
 
     it('works a field is required', function () {
-        var root = TestUtils.renderIntoDocument(<ShInputCurrency required />);
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency required/>);
         let input = TestUtils.findRenderedDOMComponentWithClass(root, 'sh-currency-input');
         TestUtils.Simulate.focus(input);
         TestUtils.Simulate.blur(input);
@@ -241,5 +241,26 @@ describe('root', function () {
 
         root.componentWillReceiveProps({});
         expect(root.state.value).toBe('')
-    })
+    });
+
+    it('changing props should update state', function () {
+        let value = 0;
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} required/>);
+
+        var props = {
+            value: 0
+        };
+        root.componentWillReceiveProps(props);
+        expect(root.state.display).toBe('$0.00')
+    });
+
+    it('changing props should update state', function () {
+        let value = 1;
+        var root = TestUtils.renderIntoDocument(<ShInputCurrency value={value} required/>);
+        var props = {
+            value: 0
+        };
+        root.componentWillReceiveProps(props);
+        expect(root.state.display).toBe('$0.00')
+    });
 });
