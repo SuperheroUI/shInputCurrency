@@ -1,7 +1,7 @@
 module.exports = {
     entry: './example/app.js',
     output: {
-        path: './example',
+        path: './bin',
         filename: 'example.js',
     },
     module: {
@@ -14,8 +14,15 @@ module.exports = {
             {
                 test: /\.html$/,
                 loader: "file?name=[name].[ext]",
-            }
+            },
+            {
+                test: /\.s?css$/,
+                loaders: ['style', 'css', 'sass']
+            },
+            {
+                test: /\.(ttf|eot|svg|jpg|png|woff)$/,
+                loader: "url-loader"
+            },
         ],
-
     }
 };

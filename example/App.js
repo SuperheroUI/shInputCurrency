@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import ShInputCurrency from '../bin/sh-input-currency'
+require('../node_modules/sh-core/bin/main.css');
 
 class App extends React.Component {
     constructor(props) {
