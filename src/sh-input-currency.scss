@@ -6,6 +6,8 @@
     width: 100%;
 
     label {
+        border-radius: $size-border-radius;
+        border: 1px solid $color-box-background3;
         position: relative;
         display: block;
         height: 50px;
