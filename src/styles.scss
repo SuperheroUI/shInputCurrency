@@ -1,0 +1,126 @@
+$color-primary: rgba(33, 97, 145, 1);
+$font-family: Montserrat;
+$font-size-primary: 14px;
+$font-size-large: 20px;
+$icon-font-size: 22px;
+$size-font-small: 12px;
+
+$size-border-radius: 0;
+$color-black: rgba(29, 29, 38, 1);
+$color-font-label: rgba(29, 29, 38, 1);
+$color-white: rgba(255, 255, 255, 1);
+$color-error: rgba(110,0,0,1);
+$color-font: rgba(29, 29, 38, 1);
+
+@import "../node_modules/typeface-montserrat/index.css";
+
+@mixin ellipsis {
+    // using this still requires element to have a width set
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin focus {
+    outline: 0;
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.sh-input-currency {
+    display: inline-block;
+    height: 44px;
+    width: 100%;
+    text-align: center;
+
+    label {
+        position: relative;
+        display: block;
+        height: 44px;
+        width: 100%;
+    }
+
+    .label {
+        text-align: left;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+
+        font-size: $size-font-small;
+        color: $color-font-label;
+        text-transform: uppercase;
+        z-index: 1;
+        @include ellipsis;
+    }
+
+    &.empty {
+        input {
+            background: $color-white;
+        }
+    }
+
+    &.sh-invalid {
+        &.sh-touched {
+            input {
+                border-bottom: 1px solid $color-error;
+            }
+        }
+    }
+
+    input {
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 36px;
+        color: $color-font;
+        border: 0;
+        border-radius: $size-border-radius;
+        background: $color-white;
+
+        @include focus;
+
+        &:hover {
+            background: $color-white;
+        }
+
+        @mixin placeholder {
+            font-family: "Montserrat";
+            line-height: 44px;
+            font-weight: 300;
+            text-align: center;
+            color: rgba($color-black, .25);
+        }
+
+        &::-moz-placeholder {
+            @include placeholder;
+        }
+
+        &:-ms-input-placeholder {
+            @include placeholder;
+        }
+
+        &::-webkit-input-placeholder {
+            @include placeholder;
+        }
+    }
+
+    .required-label {
+        font-size: 14px;
+        text-transform: uppercase;
+        opacity: 0;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+        color:$color-font;
+
+        &.show-required {
+            opacity: 1;
+        }
+    }
+}

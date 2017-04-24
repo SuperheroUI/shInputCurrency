@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as _ from 'lodash';
 import ShCore from 'sh-core';
-require('./sh-input-currency.scss');
+import './styles.scss';
 
 class ShInputCurrency extends Component {
 
@@ -40,7 +40,7 @@ class ShInputCurrency extends Component {
             rtn.msg = 'Required';
         }
 
-        var newState = _.clone(this.state);
+        let newState = _.clone(this.state);
         this.setState(newState);
         return rtn;
     };
@@ -63,7 +63,7 @@ class ShInputCurrency extends Component {
 
     componentDidMount() {
         let newValue = ShCore.getDecimal(this.props.value);
-        var newState = _.clone(this.state);
+        let newState = _.clone(this.state);
         newState.value = newValue;
         newState.display = this.runFormarters(newValue);
         newState.classList.empty = false;
@@ -77,7 +77,7 @@ class ShInputCurrency extends Component {
         let newValue = ShCore.getDecimal(props.value);
 
         if (!_.isUndefined(props.value) && !_.isEqual(newValue, this.state.value)) {
-            var newState = _.clone(this.state);
+            let newState = _.clone(this.state);
             newState.classList.empty = !newValue;
             newState.value = newValue;
             newState.display = this.runFormarters(newValue);
@@ -88,7 +88,7 @@ class ShInputCurrency extends Component {
     handleChange(event) {
         event.persist();
 
-        var dec = ShCore.getDecimal(event.target.value);
+        let dec = ShCore.getDecimal(event.target.value);
         this.setState({value: dec, display: event.target.value}, ()=> {
             if (this.props.validator) {
                 this.props.validator.validate()
@@ -103,14 +103,14 @@ class ShInputCurrency extends Component {
 
 
     handleFocus(event) {
-        var text = event.target.value;
+        let text = event.target.value;
         text = text.toString().replace(/[,$]/g, '');
 
         if (this.props.onFocus) {
             this.props.onFocus(event);
         }
 
-        var newState = _.clone(this.state);
+        let newState = _.clone(this.state);
         newState.classList.shTouched = true;
         newState.value = text;
         newState.placeholderText = '';
@@ -128,10 +128,10 @@ class ShInputCurrency extends Component {
 
     handleBlur(event) {
         this.validate();
-        var newState = _.clone(this.state);
+        let newState = _.clone(this.state);
 
         if (event.target.value.length > 0) {
-            var text = event.target.value;
+            let text = event.target.value;
             text = this.runFormarters(text);
             newState.display = text;
         }
@@ -148,7 +148,7 @@ class ShInputCurrency extends Component {
     }
 
     render() {
-        var {onFocus, onBlur, className, validator, required, value, ...other} = this.props;
+        let {onFocus, onBlur, className, validator, required, value, ...other} = this.props;
 
         return (
             <div
