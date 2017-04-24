@@ -1,5 +1,5 @@
 {
-  "name": "sh-input-currency",
+  "name": "sh-input-currency-emvio",
   "version": "0.3.1",
   "description": "Currency input box superhero theme",
   "main": "./bin/sh-input-currency.js",
@@ -53,7 +53,6 @@
     "lodash": "^4.14.1",
     "react": "15.4.0",
     "react-dom": "15.4.0",
-    "sh-core": "^0.3.0",
     "typeface-montserrat": "0.0.24"
   }
 }
