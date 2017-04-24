@@ -20,8 +20,8 @@ module.exports = {
                 loaders: ['style', 'css', 'sass']
             },
             {
-                test: /\.(ttf|eot|svg|jpg|png|woff)$/,
-                loader: "url-loader"
+                test: /\.(ttf|eot|svg|woff|woff1|woff2)$/,
+                loaders: [ "url-loader" ]
             },
         ],
     }

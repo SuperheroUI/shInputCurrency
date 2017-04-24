@@ -15,7 +15,7 @@ class ShInputCurrency extends Component {
                 empty: true
             },
             validStatus: 'unknown',
-            placeholderText: '+',
+            placeholderText: '$0.00',
             requiredField: {showRequired: false}
         };
 
