@@ -1,18 +1,4 @@
-$color-primary: rgba(33, 97, 145, 1);
-$font-family: Montserrat;
-$font-size-primary: 14px;
-$font-size-large: 20px;
-$icon-font-size: 22px;
-$size-font-small: 12px;
-
-$size-border-radius: 0;
-$color-black: rgba(29, 29, 38, 1);
-$color-font-label: rgba(29, 29, 38, 1);
-$color-white: rgba(255, 255, 255, 1);
-$color-error: rgba(110,0,0,1);
-$color-font: rgba(29, 29, 38, 1);
-
-@import "../node_modules/typeface-montserrat/index.css";
+@import "../node_modules/sh-core-emvio/src/base";
 
 @mixin ellipsis {
     // using this still requires element to have a width set
@@ -90,7 +76,7 @@ $color-font: rgba(29, 29, 38, 1);
         }
 
         @mixin placeholder {
-            font-family: "Montserrat";
+            font-family: $font-family;
             line-height: 44px;
             font-weight: 300;
             text-align: center;

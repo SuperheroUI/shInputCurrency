@@ -1,28 +1,39 @@
+var path = require('path');
+
 module.exports = {
     entry: './example/app.js',
     output: {
-        path: './bin',
+        path: path.resolve(__dirname, './bin'),
         filename: 'example.js',
     },
     module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loaders: ['babel-loader']
-            },
-            {
-                test: /\.html$/,
-                loader: "file?name=[name].[ext]",
-            },
+        rules: [
             {
                 test: /\.s?css$/,
-                loaders: ['style', 'css', 'sass']
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
+                ]
+            },
+            {
+                test: /\.jsx?$/,
+                use: [
+                    { loader: 'babel-loader' }
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.(ttf|eot|svg|woff|woff1|woff2)$/,
-                loaders: [ "url-loader" ]
+                use: [
+                    { loader: "url-loader" }]
             },
-        ],
+            {
+                test: /\.html$/,
+                use: [
+                    { loader: "file?name=[name].[ext]" }
+                ]
+            },
+        ]
     }
 };

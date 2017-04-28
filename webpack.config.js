@@ -1,14 +1,15 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
     entry: {
         'sh-input-currency': './src/sh-input-currency.js',
     },
     output: {
-        path: './bin',
+        path: path.resolve(__dirname, './bin'),
         filename: '[name].js',
         library: '[name]',
-        libraryTarget: 'umd',
+        libraryTarget: 'umd'
     },
     externals: [
         {
@@ -16,45 +17,54 @@ module.exports = {
                 root: 'React',
                 commonjs2: 'react',
                 commonjs: 'react',
-                amd: 'react',
-            },
+                amd: 'react'
+            }
         },
         {
             'react-dom': {
                 root: 'ReactDOM',
                 commonjs2: 'react-dom',
                 commonjs: 'react-dom',
-                amd: 'react-dom',
-            },
+                amd: 'react-dom'
+            }
         },
         {
             lodash: {
                 root: '_',
                 commonjs2: 'lodash',
                 commonjs: 'lodash',
-                amd: 'lodash',
-            },
-        },
+                amd: 'lodash'
+            }
+        }
     ],
     module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loaders: ['babel-loader']
-            },
-            {
-                test: /\.html$/,
-                loader: "file?name=[name].[ext]",
-            },
+        rules: [
             {
                 test: /\.s?css$/,
-                loaders: ['style', 'css', 'sass']
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
+                ]
+            },
+            {
+                test: /\.jsx?$/,
+                use: [
+                    { loader: 'babel-loader' }
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.(ttf|eot|svg|woff|woff1|woff2)$/,
-                loaders: [ "url-loader" ]
+                use: [
+                    { loader: "url-loader" }]
             },
-        ],
+            {
+                test: /\.html$/,
+                use: [
+                    { loader: "file?name=[name].[ext]" }
+                ]
+            },
+        ]
     }
 };
