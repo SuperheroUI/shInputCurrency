@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import * as _ from 'lodash';
 import ShCore from 'sh-core';
 import './styles.scss';
@@ -16,7 +16,7 @@ class ShInputCurrency extends Component {
             },
             validStatus: 'unknown',
             placeholderText: '$0.00',
-            requiredField: {showRequired: false}
+            requiredField: { showRequired: false }
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,7 +29,7 @@ class ShInputCurrency extends Component {
         if (onSubmit) {
             this.state.classList.shTouched = true;
         }
-        let rtn = {isValid: true};
+        let rtn = { isValid: true };
 
         this.state.classList.shInvalid = false;
 
@@ -85,23 +85,6 @@ class ShInputCurrency extends Component {
         }
     }
 
-    handleChange(event) {
-        event.persist();
-
-        let dec = ShCore.getDecimal(event.target.value);
-        this.setState({value: dec, display: event.target.value}, ()=> {
-            if (this.props.validator) {
-                this.props.validator.validate()
-            } else {
-                this.validate();
-            }
-
-            event.target.value = dec;
-            this.props.onChange(event);
-        });
-    };
-
-
     handleFocus(event) {
         let text = event.target.value;
         text = text.toString().replace(/[,$]/g, '');
@@ -116,25 +99,38 @@ class ShInputCurrency extends Component {
         newState.placeholderText = '';
 
         this.setState(newState,
-            ()=>{
+            () => {
                 this.refs.input.select();
             }
         );
     }
 
     formatNumber(num) {
-        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     }
+
+    handleChange(event) {
+        event.persist();
+
+        let dec = ShCore.getDecimal(event.target.value);
+        this.setState({ value: dec, display: event.target.value }, () => {
+            if (this.props.validator) {
+                this.props.validator.validate();
+            } else {
+                this.validate();
+            }
+
+            event.target.value = dec;
+            this.props.onChange(event);
+        });
+    };
 
     handleBlur(event) {
         this.validate();
         let newState = _.clone(this.state);
 
-        if (event.target.value.length > 0) {
-            let text = event.target.value;
-            text = this.runFormarters(text);
-            newState.display = text;
-        }
+        let dec = ShCore.getDecimal(event.target.value);
+        newState.display = this.runFormarters(dec);
 
         newState.placeholderText = newState.placeholderHolder;
         newState.classList.empty = !this.state.value;
@@ -148,7 +144,7 @@ class ShInputCurrency extends Component {
     }
 
     render() {
-        let {onFocus, onBlur, className, validator, required, value, ...other} = this.props;
+        let { onFocus, onBlur, className, validator, required, value, ...other } = this.props;
 
         return (
             <div
@@ -168,7 +164,7 @@ class ShInputCurrency extends Component {
                     />
                 </label>
             </div>
-        )
+        );
     }
 }
 
