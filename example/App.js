@@ -14,13 +14,13 @@ class App extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChangeMe(event) {
-        this.state.value = event.target.value;
+    handleChangeMe(val) {
+        this.state.value = val;
         this.setState(this.state);
     }
 
-    handleChange(event) {
-        this.state.value = event.target.value;
+    handleChange(val) {
+        this.state.value = val;
         this.setState(this.state);
     }
 

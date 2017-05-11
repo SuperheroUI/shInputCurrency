@@ -138,7 +138,7 @@ class ShInputCurrency extends Component {
         this.setState(newState);
 
         if (this.props.onBlur) {
-            this.props.onBlur(event);
+            this.props.onBlur(dec);
         }
     }
 
