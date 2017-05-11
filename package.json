@@ -1,6 +1,6 @@
 {
   "name": "sh-input-currency-emvio",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Currency input box superhero theme",
   "main": "./bin/sh-input-currency.js",
   "scripts": {
@@ -50,7 +50,8 @@
   "peerDependencies": {
     "lodash": ">=4.14.1",
     "react": ">=15.4.0",
-    "react-dom": ">=15.4.0"
+    "react-dom": ">=15.4.0",
+    "prop-types": "^15.5.9"
   },
   "dependencies": {
     "sh-core-emvio": "^0.3.4"

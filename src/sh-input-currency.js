@@ -120,8 +120,7 @@ class ShInputCurrency extends Component {
                 this.validate();
             }
 
-            event.target.value = dec;
-            this.props.onChange(event);
+            this.props.onChange(dec);
         });
     };
 
