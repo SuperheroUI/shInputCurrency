@@ -33,7 +33,7 @@ class App extends React.Component {
         return <div>
             <form name="test" onSubmit={this.handleSubmit}>
                 <input onChange={this.handleChange}/>
-                <ShInputCurrency label="Enter Amount" value={this.state.value} onBlur={this.handleChange} onChange={this.handleChange} required></ShInputCurrency>
+                <ShInputCurrency autoFocus label="Enter Amount" value={this.state.value} onBlur={this.handleChange} onChange={this.handleChange} required></ShInputCurrency>
                 <button type="submit">go</button>
                 {this.state.value}
             </form>

@@ -1,10 +1,11 @@
 {
   "name": "sh-input-currency-emvio",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Currency input box superhero theme",
   "main": "./bin/sh-input-currency.js",
   "scripts": {
     "clean": "rm -r ./bin",
+    "server": "webpack-dev-server --define process.env.NODE_ENV='\"development\"' --inline --content-base example --config example/webpack.example.config.js",
     "test": "./node_modules/.bin/karma start",
     "build": "./node_modules/.bin/webpack -p --config webpack.config.js",
     "dev": "./node_modules/.bin/webpack -d --watch --config webpack.config.js",
@@ -45,7 +46,8 @@
     "sh-form": "^0.1.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^2.4.1"
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "peerDependencies": {
     "lodash": ">=4.14.1",

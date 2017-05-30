@@ -96,7 +96,10 @@ class ShInputCurrency extends Component {
         let newState = _.clone(this.state);
         newState.classList.shTouched = true;
         newState.value = text;
-        newState.placeholderText = '';
+
+        if (event.target.value) {
+            newState.placeholderText = '';
+        }
 
         this.setState(newState,
             () => {
